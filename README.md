@@ -1,7 +1,7 @@
 # Custom Shell Written in C++
 
 ## Download
-Clone the project and change working folder to CustomShell-master
+Clone the project
 
 ## Compile
 ```
