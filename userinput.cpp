@@ -5,7 +5,7 @@ using namespace std;
 
 UserInput::UserInput(Shell &shell, CommandLine &commandLine) : shell(shell), commandLine(commandLine), arrow_up(false), arrow_down(false), key_code_history{0, 0}
 {
-    //RETOUR A LA LIGNE LORS DEFFACEMENT
+    //Line break during deletion
 }
 
 void UserInput::handleCtrlC()
@@ -19,7 +19,7 @@ void UserInput::handleCtrlC()
 string UserInput::processInput()
 {
     line = "";
-    int shiftIndex = 0; //0 = curseur en fin de ligne
+    int shiftIndex = 0;
     std::list<std::string>::reverse_iterator it_commands_history = commandLine.getHistoryIterator();
 
     char c = '\0';
@@ -40,7 +40,7 @@ string UserInput::processInput()
         {
             switch((int)c)
             {
-                case 65: //flèche haut
+                case 65: 
                 {
                     if(it_commands_history != commandLine.getCommandsHistory().rend())
                     {
@@ -72,7 +72,7 @@ string UserInput::processInput()
                     break;
                 }
 
-                case 66: //flèche bas
+                case 66:
                 {
                     if(it_commands_history != commandLine.getCommandsHistory().rbegin())
                     {
@@ -125,7 +125,7 @@ string UserInput::processInput()
                     break;
                 }
 
-                case 67: //flèche droite
+                case 67: 
                 {
                     if(shiftIndex < 0)
                     {
@@ -140,9 +140,9 @@ string UserInput::processInput()
                     break;
                 }
 
-                case 68: //flèche gauche
+                case 68: 
 
-                    if(shiftIndex > -(int)line.size()) //attention line.size() est unsigned !!!
+                    if(shiftIndex > -(int)line.size())
                     {
                         if((line.size()+shiftIndex+shell.getLineInterfaceSize())%shell.getTerminalSize().ws_col == 0)
                             shell.print("\033[1A\033[1000C");
@@ -160,9 +160,9 @@ string UserInput::processInput()
             key_code_history[0] = key_code_history[1] = 0;
         }
 
-        else if(c == 9 && shiftIndex == 0) //TAB = AUTOCOMPLETION, pas d'autocompletion si on est pas à la fin de la ligne
+        else if(c == 9 && shiftIndex == 0) 
         {
-            int command_size = line.size()-1; //Variable contenant la taille de la commande (si elle existe)
+            int command_size = line.size()-1; 
 
             if(line[command_size] != ' ')
             {
@@ -175,19 +175,19 @@ string UserInput::processInput()
                 }
             }
 
-            if(command_size == 1) //aucun programme à 1 caractère
+            if(command_size == 1) 
                 command_size = 0;
 
             else if(command_size > 0)
                 command_size++; //skip ' '
 
-            if(line.size() == 0) //Si on fait tabulation et qu'il n'y a rien à traiter, on fait un ls
+            if(line.size() == 0) 
             {
                 shell.print('\n');
                 return "/bin/ls";
             }
 
-            else if(line.find('/') != string::npos) //S'il y a un / dans line c'est qu'il s'agit d'un chemin d'accès
+            else if(line.find('/') != string::npos) 
             {
                 string path = "";
                 string autocomplete_word = "";
@@ -218,7 +218,7 @@ string UserInput::processInput()
                 {
                     for(string file : files)
                     {
-                        if(file.find(autocomplete_word) == 0) //si le fichier commence par autocomplete_word
+                        if(file.find(autocomplete_word) == 0) 
                         {
                             complete_with = file;
                             break;
@@ -241,7 +241,7 @@ string UserInput::processInput()
 
                         for(string file : files)
                         {
-                            if(file.find(autocomplete_word) == 0) //si le fichier commence par autocomplete_word
+                            if(file.find(autocomplete_word) == 0) 
                             {
                                 complete_with = Utils::compare(complete_with, file);
                                 possible_files.push_back(file);
@@ -372,8 +372,6 @@ string UserInput::processInput()
                     shell.print(line);
                 }
 
-                //Si aucun dossier n'a été trouvé, alors on recherche les programmes du path
-                //De plus il ne doit pas y avoir d'espace dans la ligne car sinon cela signifie que ce n'est pas une simple commande et qu'il y a des arguments
                 if(line.find(' ') == string::npos && possible_dirs.size() == 0)
                 {
                     vector<string> possible_commands;
@@ -395,7 +393,7 @@ string UserInput::processInput()
                         shell.print(sub);
                     }
 
-                    else if(possible_commands.size() > 0 && possible_commands.size() < 50) //Pour éviter de flooder le terminal
+                    else if(possible_commands.size() > 0 && possible_commands.size() < 50) 
                     {
                         shell.print("\n");
 
@@ -413,14 +411,14 @@ string UserInput::processInput()
             }
         }
 
-        else if(c == 127) //EFFACER
+        else if(c == 127) 
         {
             if(line.size() > 0 && shiftIndex == 0)
             {
                 string str = "";
 
                 if(shell.getLineInterfaceSize()+line.size() >= shell.getTerminalSize().ws_col && (line.size()+shell.getLineInterfaceSize())%(shell.getTerminalSize().ws_col) == 0)
-                    str += "\033[1A\033[1000C  \033[1A\033[1000C"; //remove \b
+                    str += "\033[1A\033[1000C  \033[1A\033[1000C"; 
 
                 else
                 {
@@ -455,7 +453,7 @@ string UserInput::processInput()
 
 
                 for(int i = 0; i < -shiftIndex+1; i++)
-                    sub += " "; //efface les caractères en trop dans la console
+                    sub += " "; 
 
                 for(int i = 0; i < -shiftIndex*2+1; i++)
                     if((line.size()-shiftIndex-i+shell.getLineInterfaceSize())%shell.getTerminalSize().ws_col == 0)
@@ -469,12 +467,12 @@ string UserInput::processInput()
             }
         }
 
-        else if(c == 126) //SUPPR
+        else if(c == 126) 
         {
             if(shiftIndex < 0)
             {
                 string sub = line.substr(line.size()+shiftIndex+1, -shiftIndex-1);
-                sub += " "; //efface le caractère en trop dans la console
+                sub += " "; 
 
                 for(int i = 0; i < -shiftIndex; i++)
                     if((shell.getLineInterfaceSize()+line.size()-i)%shell.getTerminalSize().ws_col == 0)
@@ -494,13 +492,13 @@ string UserInput::processInput()
             }
         }
 
-        else if(c == 3) // CTRL + C
+        else if(c == 3) 
         {
             shiftIndex = 0;
             handleCtrlC();
         }
 
-        else if((c >= 32 && c <= 125) ) //si c'est un caractère "normal"
+        else if((c >= 32 && c <= 125) ) 
         {
             if(shiftIndex < 0)
             {

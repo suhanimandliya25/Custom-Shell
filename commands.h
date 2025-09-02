@@ -38,18 +38,17 @@ public:
     std::vector<std::string> getDirFiles(std::string path);
     std::string clearEscapedString(std::string str);
     std::map<std::string, func_ptr> &getAvailableCommands();
-    bool pipeProcesses(std::string line); //retourne true si tout s'est bien passé
+    bool pipeProcesses(std::string line);
     bool redirectOutputFile(std::string line);
     bool isInteger(const std::string &s);
 
 private:
-    Shell &shell; //Les fonctions de cette classe ne peuvent pas être statiques à cause de cet attribut.
+    Shell &shell; 
     std::map<std::string, func_ptr> commands = {
                                                  {"help", &Command::help},
                                                  {"shell", &Command::runshell},
                                                  {"echo", &Command::echo},
                                                  {"cd", &Command::cd},
-                                                 //{"ls", ls}, //Autant utiliser /bin/ls
                                                  {"pwd", &Command::pwd},
                                                  {"delay", &Command::delay},
                                                  {"exit", &Command::exit_prog},
@@ -62,4 +61,4 @@ private:
     void delay_t(std::vector<std::string> args);
 };
 
-#endif //COMMANDS_H
+#endif

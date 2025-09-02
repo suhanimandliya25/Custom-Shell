@@ -2,16 +2,15 @@
 
 void preventParentAbort(int signal)
 {
-    //Le CTRL+C est traité par le rawmode dans le userinput.cpp,
-    //mais cette fonction permet uniquement de ne pas terminer le shell lorsque que l'on
-    //CTRL+C un fork
+    // CTRL+C is handled by rawmode in userinput.cpp,
+    // but this function only prevents the shell from exiting when
+    // CTRL+C is pressed during a fork
 }
 
 int main(int argc, char **argv)
 {
     signal(SIGINT, &preventParentAbort);
 
-    //On peut envisager plus tard que des sous shells se lance dans le premier le $(command) de bash par exemple
     Shell shell;
     shell.run();
 

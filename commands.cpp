@@ -3,7 +3,7 @@
 
 using namespace std;
 
-typedef void(Command::*func_ptr)(std::vector<std::string>); //pointeur de fonction
+typedef void(Command::*func_ptr)(std::vector<std::string>);
 
 Command::Command(Shell &shell) : shell(shell)
 {
@@ -56,15 +56,15 @@ void Command::cd(vector<string> args)
         {
             case ENOENT:
             case ENOTDIR:
-                cout << "Le dossier n'existe pas." << endl;
+                cout << "The folder does not exist." << endl;
                 break;
 
             case EACCES:
-                cout << "Accès interdit." << endl;
+                cout << "Access Denied." << endl;
                 break;
 
             default:
-                cout << "Une erreur est survenue." << endl;
+                cout << "An error has occurred." << endl;
                 break;
         }
         cout_mutex.unlock();
@@ -78,7 +78,7 @@ void Command::pwd(vector<string> args)
     if(shell.getWorkingDirectory() != "")
         cout << shell.getWorkingDirectory() << endl;
     else
-        cout << "pwd error." << endl;
+        cout << "pwd error" << endl;
 
     cout_mutex.unlock();
 }
@@ -143,43 +143,10 @@ void Command::runshell(vector<string> args)
     shell.rawMode(true);
 }
 
-/*
-//Autant utiliser /bin/ls
-void Command::ls(vector<string> args)
-{
-    string dirName = "";
-
-    if(args.size() == 0)
-        dirName = workingDirectory;
-
-    for(string str : args)
-        dirName += str + " ";
-
-    if(args.size() > 0)
-    {
-        dirName = clearEscapedString(dirName);
-        dirName.erase(dirName.size()-1);
-    }
-
-    vector<string> files = getDirFiles(dirName);
-
-    if(files.size() > 0)
-    {
-        for(string file : files)
-            cout << file << " ";
-    }
-
-    else
-        cout << "Aucun fichier ou dossier.";
-
-    cout << endl;
-}
-*/
-
 void Command::clear(vector<string> args)
 {
     cout_mutex.lock();
-    write(STDOUT_FILENO, "\033[2J\033[1;1H", sizeof("\033[2J\033[1;1H")); //async safe
+    write(STDOUT_FILENO, "\033[2J\033[1;1H", sizeof("\033[2J\033[1;1H")); 
     cout_mutex.unlock();
 }
 
@@ -209,7 +176,7 @@ void Command::exec(string filename, vector<string> args)
     if(pid == 0)
     {
         execv(filename.c_str(), params);
-        exit(1); //Ne devrait jamais être appelé en théorie
+        exit(1); 
     }
 
     if(!backgroundProcess)
@@ -245,14 +212,14 @@ bool Command::pipeProcesses(string line)
         while(i < (int)line.size() && line[i] != '|')
             current += line[i++];
 
-        while(current[0] == ' ') //delete spaces
+        while(current[0] == ' ') 
             current.erase(0, 1);
 
-        while(current[current.size()-1] == ' ') //delete spaces
+        while(current[current.size()-1] == ' ') 
             current.erase(current.size()-1, 1);
 
         progs.push_back(current);
-        i++; //skip |
+        i++;
     }
 
     cout_mutex.lock();
@@ -316,7 +283,7 @@ bool Command::redirectOutputFile(string line)
         i++;
     }
 
-    while(line[++i] == ' '); //skip spaces
+    while(line[++i] == ' '); 
 
 
     for(; i < (int)line.size(); i++)

@@ -18,7 +18,7 @@ public:
 
     std::list<std::string> &getCommandsHistory();
     std::list<std::string>::reverse_iterator &getHistoryIterator();
-    void setBegin(); //Remet l'historique au début
+    void setBegin();
 
     std::vector<std::string> getArgs() const;
     void customArgs();
@@ -32,4 +32,4 @@ private:
     std::list<std::string>::reverse_iterator it_commands_history;
 };
 
-#endif // COMMANDLINE_H
+#endif

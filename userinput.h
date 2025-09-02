@@ -17,12 +17,12 @@ class UserInput
 public:
     UserInput(Shell &shell, CommandLine &commandLine);
     std::string processInput();
-    void resetArrows(); //Réinisialise l'état des flèches
+    void resetArrows(); 
 
 private:
     Shell &shell;
     CommandLine &commandLine;
-    bool arrow_up, arrow_down; //Etat précédent des flèches, ces variables sont utilisées pour l'historique des commandes
+    bool arrow_up, arrow_down; 
     int key_code_history[2];
     std::string line;
 
@@ -30,4 +30,4 @@ private:
 
 };
 
-#endif // USERINPUT_H
+#endif 

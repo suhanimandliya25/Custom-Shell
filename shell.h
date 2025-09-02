@@ -10,7 +10,7 @@
 
 class Shell
 {
-typedef void(Command::*func_ptr)(std::vector<std::string>); //pointeur de fonction
+typedef void(Command::*func_ptr)(std::vector<std::string>); 
 
 public:
     Shell();
@@ -34,8 +34,8 @@ public:
 
 private:
     struct termios old, new1;
-    struct winsize window_size; //contient la largeur et hauteur du terminal
-    Command command; //Contient toutes les commandes de base ainsi que leurs actions
+    struct winsize window_size;
+    Command command;
     CommandLine commandLine;
     UserInput user;
 
@@ -55,4 +55,4 @@ private:
 
 };
 
-#endif // SHELL_H
+#endif

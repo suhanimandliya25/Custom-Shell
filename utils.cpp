@@ -20,7 +20,6 @@ bool Utils::isDir(string path)
     return S_ISDIR(buf.st_mode);
 }
 
-//retourne le début "commun" de 2 strings
 string Utils::compare(string s1, string s2)
 {
     string common = "";
@@ -50,7 +49,7 @@ vector<string> Utils::getDirFiles(string path)
     }
     /*
     else
-        cout << "Impossible de lister le contenu du repertoire." << endl;
+        cout << "Unable to list the contents of the directory." << endl;
 */
     return files;
 }
@@ -90,12 +89,12 @@ vector<string> Utils::parse(string line)
     vector<string> words;
 
     int i = 0;
-    while(line[i] == ' ') //skip spaces
+    while(line[i] == ' ') 
         i++;
 
     int begin_index = i;
 
-    bool stringBegin = false; // " not found
+    bool stringBegin = false;
 
     for(; i < (int)line.size(); i++)
     {
@@ -116,7 +115,6 @@ vector<string> Utils::parse(string line)
             if(word[0] == '"' || word[0] == '\\')
                 word.erase(word.begin());
 
-            //erase escapes
             for(unsigned int j = 0; j < word.size(); j++)
                 if(word[j] == '\\')
                     word.erase(word.begin()+j);
@@ -124,14 +122,14 @@ vector<string> Utils::parse(string line)
 
             words.push_back(word);
 
-            while(line[i] == ' ') //skip spaces
+            while(line[i] == ' ') 
                 i++;
 
-            begin_index = i--; //because the for loop will i++ so i--
+            begin_index = i--; 
         }
     }
 
-    if(stringBegin) // " opened but not closed
+    if(stringBegin) 
     {
         cout << "Syntax error" << endl;
         words.clear();
@@ -149,7 +147,6 @@ vector<string> Utils::parse(string line)
         if(word[0] == '"' || word[0] == '\\')
             word.erase(word.begin());
 
-        //erase escapes
         for(unsigned int j = 0; j < word.size(); j++)
             if(word[j] == '\\')
                 word.erase(word.begin()+j);

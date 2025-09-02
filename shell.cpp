@@ -15,12 +15,12 @@ Shell::Shell() : command(*this), commandLine(""), user(*this, commandLine)
 
 void Shell::print(string str) const
 {
-    write(STDOUT_FILENO, str.c_str(), str.size()); //async-safe
+    write(STDOUT_FILENO, str.c_str(), str.size()); 
 }
 
 void Shell::print(char const *str) const
 {
-    write(STDOUT_FILENO, str, strlen(str)); //async-safe
+    write(STDOUT_FILENO, str, strlen(str)); 
 }
 
 void Shell::print(char c) const
@@ -137,7 +137,7 @@ void Shell::run()
                 commandLine.setBegin();
                 user.resetArrows();
                 func_ptr func = it->second;
-                (command.*(func))(commandLine.getArgs()); //On appelle la methode de la classe Command
+                (command.*(func))(commandLine.getArgs());
             }
 
             else
@@ -159,7 +159,7 @@ void Shell::run()
 
 struct winsize Shell::getTerminalSize()
 {
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size); //On actualise la taille du terminal (au cas où celle-ci changerait), ca peut sembler overkill de mettre à jour à chaque fois qu'on récupère la taille, mais c'est préférable pour éviter une race condition
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
     return window_size;
 
 }
@@ -183,22 +183,22 @@ bool Shell::execCommand(const string cmd, const std::vector<string> &args)
 {
     bool executed = false;
 
-    if(!Utils::isDir(cmd)) //On s'assure que cmd n'est pas un dossier (histoire de pas executer un dossier x) )
+    if(!Utils::isDir(cmd)) 
     {
-        if(!access(cmd.c_str(), X_OK)) //Si le fichier est executable
+        if(!access(cmd.c_str(), X_OK)) 
         {
             command.exec(cmd, args);
             executed = true;
         }
 
-        else //Si on a pas réussi à l'executer on cherche dans la PATH si le programme y est.
+        else
         {
             for(string p : path)
             {
                 string prog = p + "/" + cmd;
                 prog = Utils::clearEscapedString(prog);
 
-                if(!access(prog.c_str(), X_OK)) //Si le fichier est executable
+                if(!access(prog.c_str(), X_OK))
                 {
                     command.exec(prog, args);
                     executed = true;
